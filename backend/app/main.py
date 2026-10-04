@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -22,6 +23,18 @@ async def lifespan(app: FastAPI):
     yield
 
 
+def _cors_origins() -> list[str]:
+    """Локальная разработка + origin'ы из CORS_ORIGINS (через запятую)."""
+    origins = [
+        "http://localhost:5173",  # Vue/Vite
+        "http://localhost:5174",
+        "http://localhost:3000",  # React
+    ]
+    extra = os.environ.get("CORS_ORIGINS", "")
+    origins.extend(o.strip() for o in extra.split(",") if o.strip())
+    return origins
+
+
 app = FastAPI(
     title="ISP Field Service ERP",
     version="0.1.0",
@@ -30,11 +43,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vue/Vite
-        "http://localhost:5174",
-        "http://localhost:3000",  # React
-    ],
+    allow_origins=_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,7 +1,8 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) || '/api/v1'
+const apiOrigin = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim()
+const API_BASE_URL = apiOrigin ? `${apiOrigin.replace(/\/+$/, '')}/api/v1` : '/api/v1'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

@@ -1,0 +1,32 @@
+# Render Blueprint: бэкенд FastAPI (ISP Field Service ERP).
+#
+# Деплой: Render Dashboard -> New -> Blueprint -> выбрать этот репозиторий -> Apply.
+# После деплоя Render выдаст URL вида https://onrela-erp-api.onrender.com —
+# его нужно указать в GitHub Actions Variable VITE_API_BASE_URL (Settings -> Secrets and variables -> Actions -> Variables).
+#
+# ВАЖНО про данные: на бесплатном плане диск эфемерный, при рестарте/редеплое
+# SQLite создаётся заново и сид наполняет демо-данными (пользовательские правки теряются).
+# Для персистентности: либо платный persistent disk (раскомментируй блок disk ниже
+# и добавь DATABASE_URL), либо внешний Postgres (Neon/Supabase) через DATABASE_URL.
+services:
+  - type: web
+    name: onrela-erp-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ISP_ERP_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://shichirjgahama.github.io
+      # --- Персистентный диск (требует платного инстанса) ---
+      # - key: DATABASE_URL
+      #   value: sqlite:////data/isp_erp.db
+    # disk:
+    #   name: onrela-data
+    #   mountPath: /data
+    #   sizeGB: 1
