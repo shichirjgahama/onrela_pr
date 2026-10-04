@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "primeicons/primeicons.css";
+
+.p-drawer { color: #171717 !important; background: #ffffff !important; }
+.p-drawer .p-drawer-header { color: #171717 !important; background: #ffffff !important; border-bottom: 1px solid #e5e5e5 !important; }
+.p-drawer .p-drawer-title { color: #171717 !important; font-weight: 600 !important; }
+.p-drawer .p-drawer-content { color: #262626 !important; background: #ffffff !important; }
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .p-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 1rem auto !important;
+  }
+  .p-drawer {
+    width: 85vw !important;
+    max-width: 320px !important;
+  }
+  table {
+    min-width: 700px;
+  }
+}
